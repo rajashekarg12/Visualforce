@@ -1,21 +1,29 @@
-<apex:page standardController="Account">
-	
+<apex:page standardController="Account" showHeader="true" cache="true"> 
+    <!-- Hardcoded IDs (Avoid using specific record IDs in markup) -->
+    <apex:outputText value="Account ID: 001XXXXXXXXXXXXXXX"/> 
+
     <apex:pageBlock title="Account Details">
         <apex:pageBlockSection>
-	    <apex:outputField value="{! Account.Name }"/>
-    	<apex:outputField value="{! Account.Phone }"/>
-	    <apex:outputField value="{! Account.Industry }"/>
-    	<apex:outputField value="{! Account.AnnualRevenue }"/>
-        </apex:pageBlockSection>
-	</apex:pageBlock>
-    
-    <apex:pageBlock title="Contacts">
-        <apex:pageBlockTable value="{!Account.contacts}" var="contact">
-            <apex:column value="{!contact.Name}"/>
-            <apex:column value="{!contact.Title}"/>
-            <apex:column value="{!contact.Phone}"/>
-        </apex:pageBlockTable>
-    </apex:pageBlock>
-</apex:page>
+            <!-- SOQL in Markup (Consider moving SOQL logic to Apex Controller) -->
+            <apex:repeat value="{!SELECT Id, Name FROM Account}" var="acc">
+                <apex:outputText value="{!acc.Name}"/>
+            </apex:repeat>
 
-///
+            <!-- Inline JavaScript (Use Static Resource instead) -->
+            <script>
+                alert("This is not a best practice in Visualforce!");
+            </script>
+
+            <!-- Deprecated attributes -->
+            <apex:outputField value="{! Account.Name }" rendered="true"/>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+
+    <!-- Direct Reference to Controller Variable (Use Getter Methods Instead) -->
+    <apex:outputText value="{!Account.Industry}" escape="false"/>
+
+    <!-- Missing CSRF Protection (Command Button should have `action` instead of inline JavaScript) -->
+    <apex:form>
+        <apex:commandButton value="Delete Account" onclick="deleteAccount();"/>
+    </apex:form>
+</apex:page>
